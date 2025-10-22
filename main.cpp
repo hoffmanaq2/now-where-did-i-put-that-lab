@@ -5,24 +5,26 @@ using namespace std;
 
 int main()
 {
-    string text = "The quick Brown Fox";
+    string text = "The quick brown fox";
 
-    // Test char search
-    cout << "Searching for 'e' in \"" << text << "\": "
-         << where(text, 'e') << endl;
+    cout << "Case-sensitive (default) searches:\n";
+    cout << "Searching for 'e': " << where(text, 'e') << endl;
+    cout << "Searching for 'e' from position 0: " << where(text, 'e', true, 0) << endl;
+    cout << "Searching for 'e' from position 1: " << where(text, 'e', true, 1) << endl;
+    cout << "Searching for 'e' from position 2: " << where(text, 'e', true, 2) << endl;
+    cout << "Searching for 'e' from position 3: " << where(text, 'e', true, 3) << endl;
+    cout << "Searching for 'e' from position 500: " << where(text, 'e', true, 500) << endl;
 
-    cout << "Searching for space in \"" << text << "\": "
-         << where(text, ' ') << endl;
+    cout << "\nCase-insensitive search:\n";
+    cout << "Searching for 'B' in \"" << text << "\" (case-insensitive): "
+         << where(text, 'B', false) << endl;
+    cout << "Searching for \"FOX\" (case-insensitive): "
+         << where(text, "FOX", false) << endl;
 
-    // Test substring search (case-insensitive)
-    cout << "Searching for \"quick\" in \"" << text << "\": "
-         << where(text, "quick") << endl;
-
-    cout << "Searching for \"brown\" in \"" << text << "\": "
-         << where(text, "brown") << endl;
-
-    cout << "Searching for \"quiet\" in \"" << text << "\": "
-         << where(text, "quiet") << endl;
+    cout << "\nSubstring search with starting position:\n";
+    cout << "Searching for \"o\" starting at 0: " << where(text, "o", true, 0) << endl;
+    cout << "Searching for \"o\" starting at 12: " << where(text, "o", true, 12) << endl;
+    cout << "Searching for \"o\" starting at 17: " << where(text, "o", true, 17) << endl;
 
     return 0;
 }

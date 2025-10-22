@@ -1,7 +1,7 @@
 #include "../src/where.hpp"
 #include <cctype> // for tolower
 
-// Helper function: make a lowercase copy of a string
+// Helper: make a lowercase copy of a string
 string toLowerCopy(const string& s)
 {
     string lower = s;
@@ -12,40 +12,54 @@ string toLowerCopy(const string& s)
     return lower;
 }
 
-// Find a single character (case-insensitive)
-int where(const string& text, char ch)
+// Character search
+int where(const string& text, char ch, bool caseSensitive, int startPos)
 {
-    char lowerCh = tolower(static_cast<unsigned char>(ch));
+    // Handle invalid starting position
+    if (startPos < 0 || startPos >= static_cast<int>(text.length()))
+        return -1;
 
-    for (size_t i = 0; i < text.length(); i++)
+    for (size_t i = startPos; i < text.length(); i++)
     {
-        if (tolower(static_cast<unsigned char>(text[i])) == lowerCh)
+        if (caseSensitive)
         {
-            return static_cast<int>(i);
+            if (text[i] == ch)
+                return static_cast<int>(i);
+        }
+        else
+        {
+            if (tolower(static_cast<unsigned char>(text[i])) == tolower(static_cast<unsigned char>(ch)))
+                return static_cast<int>(i);
         }
     }
-
     return -1; // not found
 }
 
-// Find a substring (case-insensitive)
-int where(const string& text, const string& sub)
+// Substring search
+int where(const string& text, const string& sub, bool caseSensitive, int startPos)
 {
     if (sub.empty() || text.empty() || sub.length() > text.length())
-    {
         return -1;
+
+    if (startPos < 0 || startPos >= static_cast<int>(text.length()))
+        return -1;
+
+    string searchText = text;
+    string searchSub = sub;
+
+    if (!caseSensitive)
+    {
+        searchText = toLowerCopy(text);
+        searchSub = toLowerCopy(sub);
     }
 
-    string lowerText = toLowerCopy(text);
-    string lowerSub = toLowerCopy(sub);
-
-    for (size_t i = 0; i <= lowerText.length() - lowerSub.length(); i++)
+    for (size_t i = startPos; i <= searchText.length() - searchSub.length(); i++)
     {
         bool match = true;
 
-        for (size_t j = 0; j < lowerSub.length(); j++)
+        for (size_t j = 0; j < searchSub.length(); j++)
         {
-            if (lowerText[i + j] != lowerSub[j])
+            if (searchText[i + j] != searchSub[j])
             {
                 match = false;
                 break;
@@ -53,10 +67,8 @@ int where(const string& text, const string& sub)
         }
 
         if (match)
-        {
             return static_cast<int>(i);
-        }
     }
 
-    return -1; // not found
+    return -1;
 }
